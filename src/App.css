@@ -1,0 +1,26 @@
+
+.react-flow__node{
+    border-radius: 8px;
+    /* resize: both; */
+    border:1.5px solid white;
+    border-radius: 8px;
+    
+    width: 250px;
+    height: 80px;
+    /* height:fit-content; */
+}
+.react-flow__node.selected{
+    border:2px solid #8075c1;
+    border-radius: 8px;
+    
+}
+.react-flow__handle-right{
+    transform: translate(3px);
+}
+.react-flow__handle-left{
+    transform: translate(-3px);
+}
+
+/* .react-flow__node:hover{
+    box-shadow: 0px 0px 20px 0px;
+} */
