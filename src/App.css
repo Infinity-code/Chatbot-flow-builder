@@ -1,26 +1,45 @@
 
+.react-flow__viewport{
+    transform: scale(120);
+}
+
 .react-flow__node{
     border-radius: 8px;
-    /* resize: both; */
-    border:1.5px solid white;
+    border:2px solid white;
     border-radius: 8px;
-    
     width: 250px;
-    height: 80px;
-    /* height:fit-content; */
+    min-height: 60px;
+    height: fit;
 }
+
 .react-flow__node.selected{
     border:2px solid #8075c1;
     border-radius: 8px;
     
 }
+
 .react-flow__handle-right{
-    transform: translate(3px);
-}
-.react-flow__handle-left{
-    transform: translate(-3px);
+    transform: translate(3px,-50%);
 }
 
-/* .react-flow__node:hover{
-    box-shadow: 0px 0px 20px 0px;
+.react-flow__handle-left{
+    transform: translate(-3px,-50%);
+}
+
+/* #float{
+    transform: translate(500px, -0px);
 } */
+
+.titleBar{
+    transform: scale(0);
+}   
+
+.titleBarUnsaved{
+    background-color: rgb(254, 202, 202);
+}
+
+.titleBarSave{
+    background-color: rgb(187, 247, 208);
+}
+
+

@@ -1,59 +1,92 @@
-import ReactFlow, { Edge, Node, NodeOrigin, Panel} from 'reactflow';
-import { useCallback} from 'react';
+import ReactFlow, {  Connection, NodeOrigin, useReactFlow} from 'reactflow';
+import { useCallback, useMemo} from 'react';
 import { SideBar } from './components/sidebar';
-import { Store } from './state/store';
+import { store } from './state/store';
 import 'reactflow/dist/style.css';
 import './App.css'
-import { Dagre } from './layout/dagreLayout';
 import { TextNode } from './nodes/textNode';
+import { TitleBar } from './components/titlebarCompartment/titleBar';
 
-const nodeOrigin:NodeOrigin=[0.5,0.5];
+/*
+Setting the position of node relative to its coordinates
+*/
+const nodeOrigin:NodeOrigin=[0.5,1];
 
+/*
+To let the reactflow know about any custom nodes created and to be used, an object containing a keyword and the name of the custom node component shpuld be added. This object be passed to nodeTypes attribute in Reactflow component, otherwise, a default node would render.
+*/
 const customNodes={
   "textUpdater":TextNode
 }
 
+let set=new Set();
+
+export function removeEdge(id:string){
+  set.delete(id);
+}
+
+
+
 function App() {
-  const store=Store();
+  const seller=store();
+  
+  /*
+    on dropping onto the react-flow pane, a new text node is formed
+  */
   const onDrop=useCallback((e:any)=>{
     e.preventDefault();
-    if(e.target.classList.contains("react-flow__pane")){
-      e.target.classList.remove("bg-slate-100");
-    }
-    
-    store.createNode("textUpdater",{data:""},{"x":e.clientX,"y":e.clientY});
+    seller.createNode("textUpdater",{data:""},{"x":e.clientX,"y":e.clientY});
     
   },[]);
 
-    
+  //to check if there are more than one node with empty target handle
+
+  const isValidFlow=useMemo(()=>{
+    seller.edges.map((edge)=>{
+      set.add(edge.target);
+    });
+    let temp=set.size;
+    return temp;
+  },[seller.edges]);
+
+  //To make sure atmost one edge is connected to source handle
+  
+
+
+  const isValidConnection=useCallback((connection:Connection)=>{
+    let edgeCount=1;
+    if(seller.edges.length>0){
+      seller.edges.map((edge)=>{
+        if(edge.source===connection.source){
+          edgeCount=edgeCount+1;
+        }
+      })
+    }
+    return edgeCount<=1?true:false;
+  },[seller.edges]);
 
    return(
     <div className='identifier h-screen w-screen flex flex-col '  >
-      <div className=' h-[8%] bg-slate-200 flex justify-end p-2 pr-20 min-h-10'>
-          <button type='button' className=' border-0 border-blue-600 bg-white text-sm min-h-7 pb-1 text-blue-600 rounded-lg w-[130px] shadow-md' >Save Changes</button>
-      </div>
+          <TitleBar isValidFLow={isValidFlow} nodes={seller.nodes}/>
       <div className='h-[92%] flex flex-row'>
-        <div className='dropZone w-[80%] h-[100%] ' onDragOver={onDragOver} onDragEnter={onDragEnter} onDragLeave={onDragLeave} onDrop={onDrop}>
+        <div className='dropZone w-[75%] h-[100%] ' onDragOver={onDragOver}  onDrop={onDrop}>
+          
         <ReactFlow
           nodeTypes={customNodes}
-          nodes={store.nodes}
-          edges={store.edges}
+          nodes={seller.nodes}
+          edges={seller.edges}
           nodeOrigin={nodeOrigin}
-          onNodesChange={store.onNodesChange}
-          onEdgesChange={store.onEdgesChange}
-          onConnect={store.addEdge}
-          elevateNodesOnSelect={true}
-          // preventScrolling={false}
+          onNodesChange={seller.onNodesChange}
+          onEdgesChange={seller.onEdgesChange}
+          onConnect={seller.addEdge}
+          isValidConnection={isValidConnection}
+          onEdgesDelete={(seller.onDeleteEdges)}
         >
-          <Panel position='top-right' >
-              <button >Vertical </button>
-              <button >Horizontal</button>
-          </Panel>
         </ReactFlow>
         </div>
-        <div className='w-[20%] h-full border-l-2 border-slate-200 bg-white'>
-          <div className='h-fit w-full border-b border-b-slate-300'>
-          <SideBar variant={store.sideBarComponentTrack}/>
+        <div className='w-[25%] h-full border-l-2 border-slate-200 bg-white overflow-auto'>
+          <div className='h-fit w-full'>
+          <SideBar variant={seller.sideBarComponentTrack}/>
           </div>
         
         </div>
@@ -67,23 +100,6 @@ function App() {
 
 const onDragOver=(e:any)=>{
   e.preventDefault();
-  e.dataTransfer.dropEffect="copy";
 }
 
-const onDragEnter=(e:any)=>{
-  
-  if(e.target.classList.contains("react-flow__pane")){
-    e.target.classList.add("bg-slate-100");
-  }
-  
-}
-
-const onDragLeave=(e:any)=>{
-  if(e.target.classList.contains("react-flow__pane")){
-    e.target.classList.remove("bg-slate-100");
-  }
-}
-
-
-
-export default App
+export default App;
