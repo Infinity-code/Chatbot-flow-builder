@@ -34,7 +34,7 @@ export function TextNode(){
                     <span className=" h-fit font-bold">Send Message</span>
                     </div>
                     <div className="w-[30%] flex justify-end">
-                       <img src="./src/assets/WhatsApp.svg"></img>
+                       <img src="WhatsApp.svg"></img>
                     </div>
                 </div>
                 <div className="  min-h-[70%] h-fit bg-white rounded-b-[7px] p-2 pl-3 overflow-auto ">
