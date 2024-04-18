@@ -1,5 +1,5 @@
 # Chatbot-flow-builder
-A simple chatbot flow builder built using React. A chatbot flow is built by connecting the nodes by edges.
+A simple chatbot flow builder built using React. A chatbot flow is built by connecting the nodes by edges. DRAG FROM THE RIGHT (SIDEBAR) AND DROP IT ON THE LEFT AND YOU GET YOURSELF A NODE.
 This is hosted at https://chatbot-flow-builder-omega.vercel.app/
 
 ![Screenshot 2024-04-17 160923](https://github.com/Infinity-code/Chatbot-flow-builder/assets/64525016/df6be3e0-cadb-4a92-8794-696aaf2fdb7e)
